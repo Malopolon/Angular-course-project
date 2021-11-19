@@ -5,6 +5,13 @@ import { Component } from '@angular/core';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
+
 export class AppComponent {
-  title = 'course-project';
+  title = 'angular-practice'
+  loadedPage = 'recipe'
+
+
+  onNavigate(page: string) {
+    this.loadedPage = page
+  }
 }

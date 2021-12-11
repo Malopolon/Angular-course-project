@@ -1,8 +1,8 @@
-<app-header (pageSelected)="onNavigate($event)"></app-header>
-<div class="container pt-5">
-  <div class="row flex-column">
-    <app-recipes *ngIf="loadedPage === 'recipe'"></app-recipes>
-    <app-shopping-list *ngIf="loadedPage !== 'recipe'"></app-shopping-list>
+<app-header></app-header>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <router-outlet></router-outlet>
+    </div>
   </div>
 </div>
-

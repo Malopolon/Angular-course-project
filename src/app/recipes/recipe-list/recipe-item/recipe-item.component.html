@@ -1,12 +1,18 @@
-<div class="col-12 list-group">
-    <a href="#" class="list-group-item mb-4"
-                (click)="onSelected()">
-        <div class="float-left">
-            <h4 class="list-group-item-heading">{{ recipe.name }}</h4>
-            <p class="list-group-item-text">{{ recipe.description }}</p>
-        </div>
-        <span class="float-right ml-4">
-            <img src="{{ recipe.imagePath }}" alt="{{ recipe.name }}" class="img-responsive" style="max-height: 70px;">
+<a class="list-group-item clearfix mb-2"
+   style="cursor: pointer;"
+   [routerLink]="[index]"
+   routerLinkActive="active"
+   >
+
+    <div class="float-left">
+      <h4 class="list-group-item-heading">{{ recipe.name }}</h4>
+      <p class="list-group-item-text">{{ recipe.description }}</p>
+    </div>
+        <span class="float-right mt-1">
+          <img
+            [src]="recipe.imagePath"
+            alt="{{ recipe.name }}"
+            class="img-responsive"
+            style="max-height: 50px;">
         </span>
-    </a>
-</div>
+</a>

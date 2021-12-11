@@ -1,0 +1,4 @@
+input.ng-invalid.toched,
+textarea.ng-invalid.toched {
+    border: 1px solid red
+}

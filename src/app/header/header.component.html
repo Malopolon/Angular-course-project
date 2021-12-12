@@ -7,15 +7,21 @@
   
       <div class="collapse navbar-collapse">
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item" routerLinkActive="active">
+          <li class="nav-item" routerLinkActive="active" *ngIf="isAuth">
             <a routerLink="/recipes" class="nav-link">Recipes</a>
+          </li>
+          <li class="nav-item" routerLinkActive="active" *ngIf="!isAuth">
+            <a routerLink="/auth" class="nav-link">Authenticate</a>
           </li>
           <li class="nav-item" routerLinkActive="active">
             <a routerLink="/shopping-list" class="nav-link">Shopping List</a>
           </li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-          <li class="nav-item dropdown" appDropdown>
+          <li class="nav-item" *ngIf="isAuth">
+              <a class="nav-link" (click)="onLogout()">Logout</a>
+          </li>
+          <li class="nav-item dropdown" appDropdown *ngIf="isAuth">
             <a href="#" class="nav-link dropdown-toggle" id="navbarDropdown" 
                         role="button" data-toggle="dropdown" 
                         aria-haspopup="true" aria-expanded="false">Manage

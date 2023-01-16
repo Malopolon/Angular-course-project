@@ -1,24 +1,36 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+
+import { Store } from '@ngrx/store';
+import * as fromAppStore from '../store/app.reducer'
+
 import { Subscription } from 'rxjs';
+import { map } from 'rxjs/operators';
+
 import { AuthService } from '../auth/auth.service';
 import { DataStorageService } from '../shared/data-storage.service';
+
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html'
 })
 export class HeaderComponent implements OnInit, OnDestroy {
-  isAuth  = false
+  isAuth = false
   private userSub!: Subscription
-  constructor(private dataStorageService: DataStorageService, private authService: AuthService) {}
+  constructor(
+    private dataStorageService: DataStorageService,
+    private authService: AuthService,
+    private store: Store<fromAppStore.AppState>) { }
 
   ngOnInit() {
-        this.userSub = this.authService.user.subscribe( user => {
-          this.isAuth = !!user
-          console.log(!user)
-          console.log(!!user)
-        })
-    }
+    this.userSub = this.store.select('auth')
+      .pipe(map(authState => authState.user))
+      .subscribe(user => {
+        this.isAuth = !!user
+        console.log(!user)
+        console.log(!!user)
+      })
+  }
   onSafeData() {
     this.dataStorageService.storeRecipes()
   }

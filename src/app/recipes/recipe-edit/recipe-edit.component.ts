@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormArray, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Recipe } from '../recipe.model';
 
@@ -13,7 +13,7 @@ import { RecipeService } from '../recipe.service';
 export class RecipeEditComponent implements OnInit {
 id!: number
 editMode = false
-recipeFrom!: FormGroup
+recipeFrom!: UntypedFormGroup
 
 @ViewChild('newIngredientName', {static: false}) newIngredientName!:ElementRef
 @ViewChild('newIngredientAmount', {static: false}) newIngredientAmount!:ElementRef
@@ -35,7 +35,7 @@ recipeFrom!: FormGroup
     let recipeName = ''
     let recipeImgPath = ''
     let recipeDescription = ''
-    let recipeIngredients = new FormArray([])
+    let recipeIngredients = new UntypedFormArray([])
 
     if(this.editMode) {
       const recipe = this.recipeService.getRecipe(this.id)
@@ -44,9 +44,9 @@ recipeFrom!: FormGroup
       recipeDescription = recipe.description
         if(recipe['ingredients']) {
           for ( let ingredient of recipe.ingredients) {
-            recipeIngredients.push(new FormGroup({
-              'name': new FormControl(ingredient.name,Validators.required),
-              'amount': new FormControl(ingredient.amount,[
+            recipeIngredients.push(new UntypedFormGroup({
+              'name': new UntypedFormControl(ingredient.name,Validators.required),
+              'amount': new UntypedFormControl(ingredient.amount,[
                 Validators.required,
                 Validators.pattern(/^[1-9]+[0-9]*$/)
               ])
@@ -54,13 +54,13 @@ recipeFrom!: FormGroup
           }
         }
     }
-    this.recipeFrom= new FormGroup({
-      'name': new FormControl(recipeName, Validators.required),
-      'imagePath': new FormControl(recipeImgPath, Validators.required),
-      'description': new FormControl(recipeDescription, Validators.required),
-      'newIngredient': new FormGroup({
-          'newIngredientName': new FormControl(null),
-          'newIngredientAmount': new FormControl(null, Validators.pattern(/^[1-9]+[0-9]*$/))
+    this.recipeFrom= new UntypedFormGroup({
+      'name': new UntypedFormControl(recipeName, Validators.required),
+      'imagePath': new UntypedFormControl(recipeImgPath, Validators.required),
+      'description': new UntypedFormControl(recipeDescription, Validators.required),
+      'newIngredient': new UntypedFormGroup({
+          'newIngredientName': new UntypedFormControl(null),
+          'newIngredientAmount': new UntypedFormControl(null, Validators.pattern(/^[1-9]+[0-9]*$/))
       }),
       'ingredients': recipeIngredients
     })
@@ -84,10 +84,10 @@ recipeFrom!: FormGroup
   }
 
   onAddIngredient() {
-    (<FormArray>this.recipeFrom.get('ingredients')).push(
-      new FormGroup({
-        'name': new FormControl(this.recipeFrom.get('newIngredient.newIngredientName')?.value, Validators.required),
-        'amount': new FormControl(this.recipeFrom.get('newIngredient.newIngredientAmount')?.value,[
+    (<UntypedFormArray>this.recipeFrom.get('ingredients')).push(
+      new UntypedFormGroup({
+        'name': new UntypedFormControl(this.recipeFrom.get('newIngredient.newIngredientName')?.value, Validators.required),
+        'amount': new UntypedFormControl(this.recipeFrom.get('newIngredient.newIngredientAmount')?.value,[
           Validators.required,
           Validators.pattern(/^[1-9]+[0-9]*$/)
         ])
@@ -99,10 +99,10 @@ recipeFrom!: FormGroup
 
 
   get controls() { 
-    return (<FormArray>this.recipeFrom.get('ingredients')).controls;
+    return (<UntypedFormArray>this.recipeFrom.get('ingredients')).controls;
   }
 
   onDeleteIngredient(index: number) {
-    (<FormArray>this.recipeFrom.get('ingredients')).removeAt(index)
+    (<UntypedFormArray>this.recipeFrom.get('ingredients')).removeAt(index)
   }
 }

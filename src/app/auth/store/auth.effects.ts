@@ -1,5 +1,12 @@
-import { Actions } from '@ngrx/effects'
-
+import { Actions, ofType } from '@ngrx/effects'
+import { switchMap } from 'rxjs/operators'
+import * as AuthActions from './auth.actions'
 export class AuthEffects {
-    constructor(private actions&: Actions)
+
+    authLogin = this.actions$.pipe(
+        ofType(AuthActions.LOGIN_START),
+        switchMap((authData: AuthActions.LoginStart))
+    )
+    constructor(private actions$: Actions) { }
+
 }

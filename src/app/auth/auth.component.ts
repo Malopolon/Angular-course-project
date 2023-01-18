@@ -5,6 +5,9 @@ import { Observable } from "rxjs";
 import { AuthService, AuthResponseData } from "./auth.service";
 
 
+import { Store } from '@ngrx/store'
+import * as fromAppStore from '../store/app.reducer'
+import * as AuthActions from './store/auth.actions'
 @Component({
     selector: 'app-auth',
     templateUrl: './auth.component.html'
@@ -14,17 +17,20 @@ export class AuthComponent {
     isLoginMode = true
     isLoading = false
 
-    error:string = ''
+    error: string = ''
 
 
-    constructor(private authServise: AuthService, private router: Router) {}
+    constructor(
+        private authServise: AuthService,
+        private router: Router,
+        private store: Store<fromAppStore.AppState>) { }
 
     onSwitchMode() {
         this.isLoginMode = !this.isLoginMode
     }
 
     onSubmit(form: NgForm) {
-        if(!form.valid) {
+        if (!form.valid) {
             return;
         }
         const email = form.value.email
@@ -32,13 +38,14 @@ export class AuthComponent {
         this.isLoading = true
         let authObs: Observable<AuthResponseData>
 
-        if(this.isLoginMode) {
-           authObs =  this.authServise.login(email, password)
+        if (this.isLoginMode) {
+            // authObs = this.authServise.login(email, password)
+            this.store.dispatch(new AuthActions.LoginStart({ email: email, password: password }))
         } else {
-           authObs = this.authServise.signup(email, password)
+            authObs = this.authServise.signup(email, password)
         }
 
-        authObs.subscribe( 
+        authObs.subscribe(
             resData => {
                 this.isLoading = false
                 this.router.navigate(['/recipes'])

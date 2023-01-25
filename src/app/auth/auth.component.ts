@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { NgForm } from "@angular/forms";
 import { Router } from "@angular/router";
 import { Observable } from "rxjs";
@@ -13,7 +13,7 @@ import * as AuthActions from './store/auth.actions'
     templateUrl: './auth.component.html'
 })
 
-export class AuthComponent {
+export class AuthComponent implements OnInit, OnDestroy {
     isLoginMode = true
     isLoading = false
 
@@ -24,6 +24,18 @@ export class AuthComponent {
         private authServise: AuthService,
         private router: Router,
         private store: Store<fromAppStore.AppState>) { }
+
+
+    ngOnDestroy(): void {
+
+    }
+
+    ngOnInit(): void {
+        this.store.select('auth').subscribe(authState => {
+            this.isLoading = authState.loading
+            this.error = authState.authError
+        })
+    }
 
     onSwitchMode() {
         this.isLoginMode = !this.isLoginMode
@@ -45,17 +57,17 @@ export class AuthComponent {
             authObs = this.authServise.signup(email, password)
         }
 
-        authObs.subscribe(
-            resData => {
-                this.isLoading = false
-                this.router.navigate(['/recipes'])
-            },
-            errorMessage => {
-                this.error = errorMessage
-                console.log(this.error)
-                this.isLoading = false
-            }
-        )
+        // authObs.subscribe(
+        //     resData => {
+        //         this.isLoading = false
+        //         this.router.navigate(['/recipes'])
+        //     },
+        //     errorMessage => {
+        //         this.error = errorMessage
+        //         console.log(this.error)
+        //         this.isLoading = false
+        //     }
+        // )
         form.reset()
     }
 }
